@@ -1,0 +1,14 @@
+services:        
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    platform: linux/amd64
+    ports:
+      - "35555:35555"      # HTTP
+      - "8022:8022"      # SFTP
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - mft01
+      - mft02
+      - mft03

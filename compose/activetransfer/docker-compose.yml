@@ -1,0 +1,48 @@
+services:        
+  mft01:
+    image: at:11.1.20250218
+    container_name: mft01  
+    hostname: mft01
+    platform: linux/amd64 
+    environment:
+      HOSTNAME: mft01
+      REMOTE_SERVERS: mft01,mft02,mft03
+    volumes:
+      - $HOME/shared:/opt/shared
+      - ./activetransfer/application.properties:/opt/webmethods/IntegrationServer/instances/default/application.properties
+#      - ./activetransfer/properties01.cnf:/opt/webmethods/IntegrationServer/instances/default/packages/WmMFT/config/properties.cnf
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mft02:
+    image: at:11.1.20250218
+    container_name: mft02   
+    hostname: mft02
+    platform: linux/amd64
+    environment:
+      HOSTNAME: mft02
+      REMOTE_SERVERS: mft01,mft02,mft03
+    volumes:
+      - $HOME/shared:/opt/shared
+      - ./activetransfer/application.properties:/opt/webmethods/IntegrationServer/instances/default/application.properties
+#      - ./activetransfer/properties02.cnf:/opt/webmethods/IntegrationServer/instances/default/packages/WmMFT/config/properties.cnf
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mft03:
+    image: at:11.1.20250218
+    container_name: mft03  
+    hostname: mft03
+    platform: linux/amd64
+    environment:
+      HOSTNAME: mft03
+      REMOTE_SERVERS: mft01,mft02,mft03
+    volumes:
+      - $HOME/shared:/opt/shared
+      - ./activetransfer/application.properties:/opt/webmethods/IntegrationServer/instances/default/application.properties
+#      - ./activetransfer/properties03.cnf:/opt/webmethods/IntegrationServer/instances/default/packages/WmMFT/config/properties.cnf
+    depends_on:
+      postgres:
+        condition: service_healthy

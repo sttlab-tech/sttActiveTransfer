@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dbc-job
+  labels:
+    app: dbc
+spec:
+  backoffLimit: 0  
+  template:
+    metadata:
+      labels:
+        app: dbc
+    spec:
+      restartPolicy: Never  
+      containers:
+        - name: dbc
+          image: default-route-openshift-image-registry.apps.678663c1feba7dc9c41f356d.ocp.techzone.ibm.com/mft/dbc:11.1.20250218
+          env:
+            - name: DATABASE_SERVER
+              value: "pgsqldemo-primary.pgsql.svc"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_NAME
+              value: "pgsqldemo"
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mft-secrets
+                  key: DATABASE_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mft-secrets
+                  key: DATABASE_PASSWORD
+          command: 
+            - "dbConfigurator.sh"
+          args:
+            - "-a"
+            - "create"
+            - "-d"
+            - "pgsql"
+            - "-c"
+            - "ISInternal,DocumentHistory,CrossReference,ISCoreAudit,DistributedLocking,ProcessAudit,ActiveTransfer,ActiveTransferArchive,CommonDirectoryServices"
+            - "-v"
+            - "latest"
+            - "-l"
+            - "jdbc:wm:postgresql://$(DATABASE_SERVER):$(DATABASE_PORT);databaseName=$(DATABASE_NAME)"
+            - "-u"
+            - "$(DATABASE_USER)"
+            - "-p"
+            - "$(DATABASE_PASSWORD)"

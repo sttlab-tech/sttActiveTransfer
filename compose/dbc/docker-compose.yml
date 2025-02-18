@@ -1,0 +1,30 @@
+services:
+  dbc:
+    image: dbc:11.1
+    container_name: dbc
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_SERVER: "${DB_SERVER}"
+      DB_PORT: "${DB_PORT}"
+      DB_NAME: "${DB_NAME}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+    command:
+      - "dbConfigurator.sh"
+      - "-a"
+      - "create"
+      - "-d"
+      - "pgsql"
+      - "-c"
+      - "ISInternal,DocumentHistory,CrossReference,ISCoreAudit,DistributedLocking,ProcessAudit,ActiveTransfer,ActiveTransferArchive,CommonDirectoryServices"
+      - "-v"
+      - "latest"
+      - "-l"
+      - "jdbc:wm:postgresql://${DB_SERVER}:${DB_PORT};databaseName=${DB_NAME}"
+      - "-u"
+      - "${DB_USERNAME}"
+      - "-p"
+      - "${DB_PASSWORD}"
+    restart: "no"
