@@ -92,6 +92,27 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mft-listeners
+  labels:
+    app.kubernetes.io/name: activetransfer
+    app.kubernetes.io/instance: mft
+    app.kubernetes.io/version: "11.1"
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: sftp
+    name: sftp
+  selector:
+    app.kubernetes.io/name: activetransfer
+    app.kubernetes.io/instance: mft
+
+---
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

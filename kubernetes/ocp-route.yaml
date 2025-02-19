@@ -1,0 +1,22 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: mft-ui
+  labels:
+    app.kubernetes.io/instance: mft
+    app.kubernetes.io/name: activetransfer
+    app.kubernetes.io/version: '11.1'
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: mft-ui-mft.apps.678663c1feba7dc9c41f356d.ocp.techzone.ibm.com
+  to:
+    kind: Service
+    name: mft
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  wildcardPolicy: None
+
