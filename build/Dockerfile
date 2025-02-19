@@ -67,7 +67,10 @@ RUN yum -y update ;\
     useradd -u 1724 -m -g 0 -d /opt/webmethods wm
 
 RUN chmod 770 /opt/webmethods
-COPY --from=builder /opt/webmethods /opt/webmethods
+COPY --from=builder /opt/webmethods/common /opt/webmethods/common
+COPY --from=builder /opt/webmethods/jvm /opt/webmethods/jvm
+COPY --from=builder /opt/webmethods/IntegrationServer /opt/webmethods/IntegrationServer
+COPY --from=builder /opt/webmethods /opt/webmethods/ 
 
 USER wm
 

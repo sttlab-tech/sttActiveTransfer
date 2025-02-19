@@ -49,10 +49,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8000
-    protocol: TCP
-    targetPort: sftp
-    name: http-mft-ui
   - port: 5555
     protocol: TCP
     targetPort: http
@@ -134,7 +130,7 @@ spec:
         - name: mft
           securityContext:
             fsGroup: 1724
-          image: "default-route-openshift-image-registry.apps.678663c1feba7dc9c41f356d.ocp.techzone.ibm.com/mft/activetransfer:11.1.20250219"
+          image: "ghcr.io/staillanibm/activetransfer:11.1.20250219"
           imagePullPolicy: Always
           env:
           - name: JAVA_MIN_MEM
